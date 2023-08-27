@@ -1,0 +1,74 @@
+menu = """
+* CAIXA ELETRÔNICO*
+[d] Depositar
+[s] Sacar
+[e] Extrato
+[q] Sair
+"""
+
+saldo = 0
+limite = 500
+extrato = []
+numero_saques = 0
+Limite_Saques = 3
+
+def depositar(saldo, extrato):
+    valor = float(input("Informe o valor do depósito: ")) 
+
+    if valor > 0:
+        saldo += valor
+        extrato.append(f"Depósito: R${valor:.2f}")
+    else:
+        print("Operação falhou! O valor informado não é válido.")
+    
+    return saldo, extrato
+
+def sacar(saldo, extrato, numero_saques):
+    valor = float(input("Informe o valor do saque: "))
+    excedeu_Saldo = valor > saldo
+    excedeu_Limite = valor > limite
+    excedeu_saques = numero_saques >= Limite_Saques
+
+    if excedeu_Saldo:
+        print("Operação falhou, saldo insuficiente")
+    elif excedeu_Limite:
+        print("Operação falhou, o valor do saque excede o limite")
+    elif valor > 0:
+        saldo -= valor
+        extrato.append(f"Saque: R${valor:.2f}")
+        numero_saques += 1
+    else:
+        print("Operação falhou, o valor informado é inválido")
+
+    return saldo, extrato, numero_saques
+
+def extrato_bancario(saldo, extrato):
+    print("***********EXTRATO*********************************")
+    if not extrato:
+        print("Não foram realizadas movimentações.")
+    else:
+        for transacao in extrato:
+            print(transacao)
+    print(f"\nSaldo: R${saldo:.2f}")
+    print("********************************************")
+
+while True:
+    print(menu)
+    opcao = input("Escolha uma opção: ")
+
+    if opcao == "d":
+        saldo, extrato = depositar(saldo, extrato)
+   
+    elif opcao == "s":
+        saldo, extrato, numero_saques = sacar(saldo, extrato, numero_saques)
+
+    elif opcao == "e":
+        extrato_bancario(saldo, extrato)
+
+    elif opcao == "q":
+        break
+
+    else:
+        print("Operação inválida, por favor selecione novamente a operação.")
+
+
